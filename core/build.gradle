@@ -1,0 +1,15 @@
+ext {
+	slf4jVersion =  "1.7.25"
+	poiVersion = "3.9"
+}
+
+dependencies {
+	
+	// Excel output
+	// compile "org.apache.poi:poi:${poiVersion}"
+	compile "org.apache.poi:poi-ooxml:${poiVersion}"
+	   
+	compile "org.slf4j:slf4j-api:${slf4jVersion}"
+	compile "ch.qos.logback:logback-classic:1.1.3"
+
+}
