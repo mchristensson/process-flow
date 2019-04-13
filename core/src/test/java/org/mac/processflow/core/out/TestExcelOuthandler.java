@@ -125,6 +125,7 @@ public class TestExcelOuthandler {
 		outhandler.writeSnapshot(data);
 		
 		try {
+			outhandler.transposeToNewSheet();
 			outhandler.writeToFile(path);
 		} catch (Exception e) {
 			fail(e.getMessage());

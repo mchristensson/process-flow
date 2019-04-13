@@ -10,6 +10,9 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -55,6 +58,41 @@ public class ExcelOuthandler implements SnapshotWriter {
 			}
 
 		});
+
+	}
+	
+	public void transposeToNewSheet() {
+		int lastRow = sheet.getLastRowNum();
+	    int lastColumn = 0;
+	    //Find maximum consumed cell
+	    for (Row row : sheet) {
+	        if (lastColumn < row.getLastCellNum()) {
+	            lastColumn = row.getLastCellNum();
+	        }
+	    }
+	    
+	    Sheet sheetTransposed = workbook.createSheet();
+	    for (int rowNum = 0; rowNum <= lastRow; rowNum++) {
+	        Row row = sheet.getRow(rowNum);
+	        if (row == null) {
+	            continue;
+	        }
+	        for (int columnNum = 0; columnNum < lastColumn; columnNum++) {
+	            Cell cell = row.getCell(columnNum);
+	            int ri = cell.getRowIndex();
+	            int ci = cell.getColumnIndex();
+	            if(cell.getCellType() == -1 && ri == -1 && ci == -1) {
+	            	continue;
+	            }
+	            
+	            Row rowTransposed = sheetTransposed.getRow(ci);
+		        if (rowTransposed == null) {
+		        	rowTransposed = sheetTransposed.createRow(ci);
+		        }
+		        Cell cellTransposed = rowTransposed.createCell(ri);
+		        cellTransposed.setCellValue(cell.getStringCellValue());
+	        }
+	    }
 
 	}
 
