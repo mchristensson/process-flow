@@ -9,7 +9,7 @@ public class Activity extends AbstractProcessData {
 	public Activity setGroupLevel(int groupLevel) {
 		return (Activity) super.setGroupLevel(groupLevel);
 	}
-	
+
 	public Activity setState(ProcessDataState state) {
 		return (Activity) super.setState(state);
 	}

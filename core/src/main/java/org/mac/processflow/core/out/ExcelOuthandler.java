@@ -53,46 +53,46 @@ public class ExcelOuthandler implements SnapshotWriter {
 				if (groupLevel == 0) {
 					levelMap.put(0, index);
 				} else if (groupLevel > 0) {
-					sheet.groupColumn(levelMap.get(groupLevel-1), index);
+					sheet.groupColumn(levelMap.get(groupLevel - 1), index);
 				}
 			}
 
 		});
 
 	}
-	
+
 	public void transposeToNewSheet() {
 		int lastRow = sheet.getLastRowNum();
-	    int lastColumn = 0;
-	    //Find maximum consumed cell
-	    for (Row row : sheet) {
-	        if (lastColumn < row.getLastCellNum()) {
-	            lastColumn = row.getLastCellNum();
-	        }
-	    }
-	    
-	    Sheet sheetTransposed = workbook.createSheet();
-	    for (int rowNum = 0; rowNum <= lastRow; rowNum++) {
-	        Row row = sheet.getRow(rowNum);
-	        if (row == null) {
-	            continue;
-	        }
-	        for (int columnNum = 0; columnNum < lastColumn; columnNum++) {
-	            Cell cell = row.getCell(columnNum);
-	            int ri = cell.getRowIndex();
-	            int ci = cell.getColumnIndex();
-	            if(cell.getCellType() == -1 && ri == -1 && ci == -1) {
-	            	continue;
-	            }
-	            
-	            Row rowTransposed = sheetTransposed.getRow(ci);
-		        if (rowTransposed == null) {
-		        	rowTransposed = sheetTransposed.createRow(ci);
-		        }
-		        Cell cellTransposed = rowTransposed.createCell(ri);
-		        cellTransposed.setCellValue(cell.getStringCellValue());
-	        }
-	    }
+		int lastColumn = 0;
+		// Find maximum consumed cell
+		for (Row row : sheet) {
+			if (lastColumn < row.getLastCellNum()) {
+				lastColumn = row.getLastCellNum();
+			}
+		}
+
+		Sheet sheetTransposed = workbook.createSheet();
+		for (int rowNum = 0; rowNum <= lastRow; rowNum++) {
+			Row row = sheet.getRow(rowNum);
+			if (row == null) {
+				continue;
+			}
+			for (int columnNum = 0; columnNum < lastColumn; columnNum++) {
+				Cell cell = row.getCell(columnNum);
+				int ri = cell.getRowIndex();
+				int ci = cell.getColumnIndex();
+				if (cell.getCellType() == -1 && ri == -1 && ci == -1) {
+					continue;
+				}
+
+				Row rowTransposed = sheetTransposed.getRow(ci);
+				if (rowTransposed == null) {
+					rowTransposed = sheetTransposed.createRow(ci);
+				}
+				Cell cellTransposed = rowTransposed.createCell(ri);
+				cellTransposed.setCellValue(cell.getStringCellValue());
+			}
+		}
 
 	}
 
