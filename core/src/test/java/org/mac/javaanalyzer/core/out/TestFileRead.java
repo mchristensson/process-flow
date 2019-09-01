@@ -25,8 +25,8 @@ public class TestFileRead {
 		KlassDefinition obj = JavaFileReader.readFromFile(new File(uri.getFile()));
 		List<SektionX> sektion = obj.getImports();
 
+		//Imports och package
 		Assert.assertThat(sektion.size(), IsEqual.equalTo(19));
-		
 		
 		assertListContains(sektion, StringContains.containsString("package org.springframework.boot.devtools"));
 		assertListContains(sektion, StringContains.containsString("import java.util.ArrayList"));
@@ -60,6 +60,9 @@ public class TestFileRead {
 		assertListContains(sektion,
 				StringContains.containsString("import org.springframework.core.io.ClassPathResource"));
 
+		//Klass
+		Assert.assertThat(obj.getText(), IsEqual.equalTo("APA"));
+		
 	}
 
 	private static void assertListContains(List<SektionX> items, Matcher<String> matcher) {

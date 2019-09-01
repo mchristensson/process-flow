@@ -42,7 +42,6 @@ public class JavaFileReader {
 			while (currentLine != null) {
 
 				if (currentLine.contains("/*")) {
-					System.out.println("Inne i kommentar");
 					inCommentSection = true;
 				}
 
@@ -58,14 +57,11 @@ public class JavaFileReader {
 				} else if (!inCommentSection && currentLine.contains("{")) {
 					if (!klass.hasStarted()) {
 						klass.parse(handleSection(builder, currentLine, "\\{"));
-						
 					} else {
 						klass.addLogic(handleSection(builder, currentLine, "\\{"), KlassDefinition.PUSH);
 					}
-
 				} else if (!inCommentSection && currentLine.contains("}")) {
 					klass.addLogic(handleSection(builder, currentLine, "\\}"), KlassDefinition.POP);
-					
 				} 
 
 				if (currentLine.contains("*/")) {
@@ -88,12 +84,11 @@ public class JavaFileReader {
 		if (segments.length == 0) {
 			return "";
 		}
-		builder.append(segments[0]);
+		builder.append(segments[0].trim());
 		String section = builder.toString();
-		System.out.println("Sektion påbörjas (" + pattern + "): " + builder.toString());
 		builder.delete(0, builder.length());
 		if (segments.length > 1) {
-			builder.append(segments[1]);
+			builder.append(segments[1].trim());
 		}
 		return section;
 	}

@@ -19,6 +19,9 @@ public class KlassDefinition implements SektionX {
 	private boolean started;
 	private List<String> logic = new LinkedList<>();
 	private int level = KLASS;
+	
+	private List<MetodDefinition> metoder = new ArrayList<>();
+	private MetodDefinition currentMethod;
 
 	public void addImportOrPackage(SektionX importDefintion) {
 		this.importOrPackages.add(importDefintion);
@@ -32,21 +35,44 @@ public class KlassDefinition implements SektionX {
 	public void parse(String text) {
 		this.text = text;
 		this.started=true;
-		push();
+		this.level++;
 	}
 
 	public void addLogic(String handleSection, int pop2) {
 		switch (pop2) {
 		case PUSH:
 			this.logic.add(handleSection);
-			push();
+			if (KlassDefinition.METOD == this.getLevel()){
+				MetodDefinition m= new MetodDefinition();
+				m.parse(handleSection);
+				this.metoder.add(m);
+				this.currentMethod = m;
+			} else {
+				if (this.currentMethod == null ) {
+					System.out.print("Level: " + this.getLevel());
+				}
+				this.currentMethod.addLogic(handleSection);
+			}
+			this.level++;
+			System.out.println("Level (pushed): " + level);
 			break;
 		case POP:
 			this.logic.add(handleSection);
-			pop();
+			if (this.currentMethod == null ) {
+				System.out.print("Level: " + this.getLevel());
+			}
+			this.currentMethod.addLogic(handleSection);
+			if (KlassDefinition.METOD == this.getLevel()){
+				this.currentMethod = null;
+			} 
+
+			this.level--;
+			System.out.println("Level (popped): " + level);
 			break;
 		default:
 			this.logic.add(handleSection);
+			this.currentMethod.addLogic(handleSection);
+			
 		}
 	}
 
@@ -58,18 +84,10 @@ public class KlassDefinition implements SektionX {
 		return this.text;
 	}
 
-	public void push() {
-		this.level++;
-		System.out.println("Level (pushed): " + level);
-	}
 
 	public int getLevel() {
 		return level;
 	}
 
-	public void pop() {
-		this.level--;
-		System.out.println("Level (popped): " + level);
-	}
 
 }
